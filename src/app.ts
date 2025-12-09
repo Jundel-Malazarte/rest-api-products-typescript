@@ -1,19 +1,29 @@
 import express from "express"
-import * as dotevnv from "dotenv"
+import * as dotevnv from "dotenv" // Typo: Should be 'dotenv'
 import cors from "cors"
 import helmet from "helmet"
 import { userRouter } from "./users/users.routes"
 import { productRouter } from "./products/products.routes"
-import mysql from "mysql"
+import mysql from "mysql" 
 
-dotevnv.config()
+// --- START: Critical Correction Area ---
 
-if(!process.env.PORT){
-    console.log(`No port value specified...`)
+// 1. Load environment variables FIRST
+dotevnv.config() // Assuming the path to .env is correct
+
+// 2. Define PORT with a strong fallback
+// The !! check is no longer needed. Use a default port like 3000 if process.env.PORT is undefined or fails to parse.
+// We use 8080 or 3000 as common defaults.
+const DEFAULT_PORT = 3000; 
+
+const PORT = parseInt(process.env.PORT as string, 10) || DEFAULT_PORT;
+
+// Optional: Inform the user if the default was used
+if (PORT === DEFAULT_PORT && !process.env.PORT) {
+    console.log(`Warning: process.env.PORT not found. Using default port: ${DEFAULT_PORT}`);
 }
 
-
-const PORT = parseInt(process.env.PORT as string, 10)
+// --- END: Critical Correction Area ---
 
 const app = express()
 

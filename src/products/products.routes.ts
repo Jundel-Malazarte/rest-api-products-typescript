@@ -1,4 +1,3 @@
-
 import express, {Request, Response} from "express" 
 import { Product, UnitProduct } from "./product.interface" 
 import * as database from "./product.database"
@@ -6,11 +5,12 @@ import {StatusCodes} from "http-status-codes"
 
 export const productRouter = express.Router()
 
+// GET All Products
 productRouter.get('/products', async (req: Request, res: Response) => {
 
     try {
          const allProducts = await database.findAll()
-        if (!allProducts) {
+        if (!allProducts || allProducts.length === 0) { // Added check for empty array
             return res.status (StatusCodes.NOT_FOUND).json({error: `No products found!`})
         }
    
@@ -21,7 +21,8 @@ productRouter.get('/products', async (req: Request, res: Response) => {
 })
 
 
-productRouter.get("/product/:id", async (req: Request, res: Response) => {
+// GET Product by ID (Corrected path to /products/:id)
+productRouter.get("/products/:id", async (req: Request, res: Response) => {
     try {
         const product = await database.findOne(req.params.id)
          if (!product) {
@@ -34,11 +35,12 @@ productRouter.get("/product/:id", async (req: Request, res: Response) => {
 })
 
 
-productRouter.post("/product", async (req: Request, res: Response) => {
+// POST Create Product (Corrected path to /products)
+productRouter.post("/products", async (req: Request, res: Response) => {
     try {
         const {name, price, quantity, image} = req.body
         if (!name || !price || !quantity || !image) {
-            return res.status (StatusCodes.BAD_REQUEST).json({error: `Please provide all the paramters`})
+            return res.status (StatusCodes.BAD_REQUEST).json({error: `Please provide all the parameters`})
         }
 
         const newProduct = await database.create({...req.body}) 
@@ -49,7 +51,8 @@ productRouter.post("/product", async (req: Request, res: Response) => {
 })
 
 
-productRouter.put("/product/:id", async (req: Request, res : Response) => {
+// PUT Update Product (Corrected path to /products/:id)
+productRouter.put("/products/:id", async (req: Request, res : Response) => {
     try {
         const id = req.params.id
         const newProduct = req.body
@@ -66,8 +69,8 @@ productRouter.put("/product/:id", async (req: Request, res : Response) => {
 })
 
 
-
-productRouter.delete("/product/:id", async (req: Request, res: Response) => {
+// DELETE Product (Corrected path to /products/:id)
+productRouter.delete("/products/:id", async (req: Request, res: Response) => {
     try {
         const getProduct = await database.findOne(req.params.id)
         if (!getProduct) {
