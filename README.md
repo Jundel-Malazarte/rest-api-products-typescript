@@ -88,14 +88,14 @@ GET http://localhost:3000/products/
 ]
 ```
 
-#### Search Users by Email
+#### Search Products by ID
 ```
-GET /users/search/email?email=<email>
+GET /products/<id>
 ```
 
 **Example Request:**
 ```
-GET http://localhost:7001/users/search/email?email=jundelmalazarte348@gmail.com
+GET http://localhost:3000/products/f19c643e-643b-4021-9e27-be2339351635
 ```
 
 ### Other Endpoints
